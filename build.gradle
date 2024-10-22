@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.11.2'  // Correct Allure plugin
 }
 
 group = 'org.example'
@@ -15,7 +16,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.testng/testng
     testImplementation("org.testng:testng:7.7.0")
 }
-
+allure {
+    version = '2.13.6'
+}
 tasks.test {
     useJUnitPlatform()  // This will run JUnit tests
 }
