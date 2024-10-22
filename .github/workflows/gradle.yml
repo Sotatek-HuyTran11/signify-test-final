@@ -29,7 +29,7 @@ jobs:
       run: ./gradlew allureReport
 
     - name: Upload Unit Test Reports (Allure)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: allure-unit-test-report
         path: build/reports/allure-results/
@@ -66,7 +66,7 @@ jobs:
       run: ./gradlew allureReport
 
     - name: Upload Unit Test Reports (Allure)
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: allure-unit-test-report
         path: build/reports/allure-results/
