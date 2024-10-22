@@ -25,11 +25,14 @@ jobs:
     - name: Run Unit Tests
       run: ./gradlew test
 
-    - name: Generate Unit Test Report
-      run: |
-        mkdir -p reports/unit-tests
-        cp -r build/test-results/test/* reports/unit-tests/
-      continue-on-error: true
+    - name: Generate Allure Report for Unit Tests
+      run: ./gradlew allureReport
+
+    - name: Upload Unit Test Reports (Allure)
+      uses: actions/upload-artifact@v2
+      with:
+        name: allure-unit-test-report
+        path: build/reports/allure-results/
 
   e2e-tests:
     runs-on: ubuntu-latest
@@ -58,3 +61,12 @@ jobs:
 
     - name: Run E2E Tests
       run: ./gradlew testNG # Assuming your e2e tests are under e2eTest task
+
+    - name: Generate Allure Report for Unit Tests
+      run: ./gradlew allureReport
+
+    - name: Upload Unit Test Reports (Allure)
+      uses: actions/upload-artifact@v2
+      with:
+        name: allure-unit-test-report
+        path: build/reports/allure-results/
