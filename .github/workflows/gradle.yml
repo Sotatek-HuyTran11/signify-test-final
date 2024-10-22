@@ -17,7 +17,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
-        java-version: '17'  # specify the Java version you're using
+        java-version: '21'  # specify the Java version you're using
 
     - name: Set up Gradle
       uses: gradle/gradle-build-action@v2
