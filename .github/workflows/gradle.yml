@@ -47,6 +47,8 @@ jobs:
     - name: Set up Gradle
       uses: gradle/gradle-build-action@v2
 
+    - name: Run Docker Compose (Spin up services)
+      run: docker-compose up -d  # Ensure your docker-compose.yml is correctly set up
     - name: Run E2E Tests
       run: ./gradlew testNG # Assuming your e2e tests are under e2eTest task
 
@@ -55,34 +57,3 @@ jobs:
         mkdir -p reports/e2e-tests
         cp -r build/test-results/e2eTest/* reports/e2e-tests/
       continue-on-error: true
-  test:
-    name: Run integration test using keria:${{ matrix.keria-version }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ 'ubuntu-latest' ]
-        keria-version: [ '0.2.0-dev3' ]
-        node-version: [ '20' ]
-    env:
-      KERIA_IMAGE_TAG: ${{ matrix.keria-version }}
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - name: install deps
-        run: npm ci
-      - name: Build
-        run: npm run build
-      - name: Print docker compose config
-        run: docker compose config
-      - name: Start dependencies
-        run: docker compose up deps --pull always
-      - name: Run integration test
-        run: npm run test:integration
-      - name: Print logs
-        run: docker compose logs
-        if: always()
