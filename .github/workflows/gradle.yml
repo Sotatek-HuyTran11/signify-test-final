@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - master  # or any branch you want to run tests on
+  push:
+    branches:
+      - master
 
 jobs:
   unit-tests:
