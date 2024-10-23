@@ -68,5 +68,5 @@ jobs:
       - name: Upload Unit Test Reports (Allure)
         uses: actions/upload-artifact@v3
         with:
-          name: allure-unit-test-report
+          name: allure-e2e-test-report
           path: build/reports/allure-report/allureReport
