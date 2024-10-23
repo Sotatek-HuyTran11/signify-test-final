@@ -19,14 +19,49 @@ dependencies {
 allure {
     version = '2.13.6'
 }
+
+// JUnit Tests (unit tests)
 tasks.test {
-    useJUnitPlatform()  // This will run JUnit tests
+    useJUnitPlatform()  // Use JUnit 5 platform
+    finalizedBy 'allureReport'
 }
 
-// Define a separate task for running TestNG tests
+// Separate task for TestNG tests (E2E tests)
 tasks.register('testNG', Test) {
-    useTestNG()  // This will run TestNG tests
+    useTestNG()  // Use TestNG for E2E tests
     testLogging {
         events "passed", "failed", "skipped"
+    }
+    finalizedBy 'allureReport'
+}
+
+
+// Custom Allure report task for unit tests
+tasks.register('allureUnitTestReport') {
+    doLast {
+        copy {
+            from "$buildDir/allure-results" // Default results dir
+            into "$buildDir/allure-results/unitTest"
+        }
+        javaexec {
+            main = 'io.qameta.allure.cli.AllureCommand'
+            classpath = configurations.allure
+            args = ['generate', "$buildDir/allure-results/unitTest", '-o', "$buildDir/reports/allure-report/unitTest"]
+        }
+    }
+}
+
+// Custom Allure report task for E2E tests
+tasks.register('allureE2ETestReport') {
+    doLast {
+        copy {
+            from "$buildDir/allure-results" // Default results dir
+            into "$buildDir/allure-results/e2eTest"
+        }
+        javaexec {
+            main = 'io.qameta.allure.cli.AllureCommand'
+            classpath = configurations.allure
+            args = ['generate', "$buildDir/allure-results/e2eTest", '-o', "$buildDir/reports/allure-report/e2eTest"]
+        }
     }
 }
