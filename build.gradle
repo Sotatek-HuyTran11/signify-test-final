@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'io.qameta.allure' version '2.11.2'  // Correct Allure plugin
+    id 'jacoco'  // Add the Jacoco plugin
 }
 
 group = 'org.example'
@@ -11,22 +12,70 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    // https://mvnrepository.com/artifact/org.testng/testng
-    testImplementation("org.testng:testng:7.7.0")
+    // Add JUnit 5 dependency for testing
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    // Add JUnit 4 dependency if needed
+    testImplementation 'junit:junit:4.13.2'
+
 }
 allure {
     version = '2.13.6'
 }
-tasks.test {
-    useJUnitPlatform()  // This will run JUnit tests
+// Define the source sets for unit tests and e2e tests
+sourceSets {
+    // Unit test source set (if you already have this)
+    unitTest {
+        java {
+            srcDir 'src/unitTest/java'  // Folder for unit test cases
+        }
+        resources {
+            srcDir 'src/unitTest/resources'
+        }
+    }
+
+    // e2e test source set
+    e2eTest {
+        java {
+            srcDir 'src/test/java'  // Folder for e2e test cases
+        }
+        resources {
+            srcDir 'src/test/resources'
+        }
+    }
+}
+// Include the dependencies for e2eTest from the main source set and test dependencies
+configurations {
+    e2eTestImplementation.extendsFrom testImplementation
+    e2eTestRuntimeClasspath.extendsFrom testRuntimeClasspath
 }
 
-// Define a separate task for running TestNG tests
-tasks.register('testNG', Test) {
-    useTestNG()  // This will run TestNG tests
-    testLogging {
-        events "passed", "failed", "skipped"
+// Task to run unit tests
+tasks.register('unitTest', Test) {
+    testClassesDirs = sourceSets.unitTest.output.classesDirs
+    classpath = sourceSets.unitTest.runtimeClasspath
+    useJUnitPlatform()  // Use JUnit 5 or adapt for JUnit 4 if necessary
+}
+
+// Task to run e2e tests
+tasks.register('e2eTest', Test) {
+    testClassesDirs = sourceSets.e2eTest.output.classesDirs
+    classpath = sourceSets.e2eTest.runtimeClasspath
+    useJUnitPlatform()  // Use JUnit 5 for e2e tests
+}
+// Configure JaCoCo for code coverage
+tasks.jacocoTestReport {
+    dependsOn tasks.unitTest, tasks.e2eTest  // Ensure tests run before generating the report
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        csv.required.set(false)
+        html.outputLocation.set(file("$buildDir/reports/jacoco"))
     }
+    executionData = files("$buildDir/jacoco/unitTest.exec", "$buildDir/jacoco/e2eTest.exec")
+}
+
+jacoco {
+    toolVersion = "0.8.8"  // Ensure the correct version of Jacoco is used
 }
