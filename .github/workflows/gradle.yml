@@ -63,7 +63,7 @@ jobs:
       run: ./gradlew e2eTest # Assuming your e2e tests are under e2eTest task
 
     - name: Generate JaCoCo Report for E2E Tests
-      run: ./gradlew jacocoTestReport  # You may need to customize if e2e has a separate task
+      run: ./gradlew jacocoTestReport  --info # You may need to customize if e2e has a separate task
 
     - name: Upload E2E Test Coverage Report (JaCoCo)
       uses: actions/upload-artifact@v3
