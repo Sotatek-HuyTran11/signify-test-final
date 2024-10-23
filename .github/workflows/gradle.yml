@@ -26,7 +26,7 @@ jobs:
       run: ./gradlew test
 
     - name: Generate Allure Report for Unit Tests
-      run: ./gradlew allureReport -p unitTest
+      run: ./gradlew allureUnitTestReport
 
     - name: Upload Unit Test Reports (Allure)
       uses: actions/upload-artifact@v3
@@ -63,7 +63,7 @@ jobs:
       run: ./gradlew testNG # Assuming your e2e tests are under e2eTest task
 
     - name: Generate Allure Report for Unit Tests
-      run: ./gradlew allureReport -p e2eTest
+      run: ./gradlew allureE2ETestReport
 
     - name: Upload Unit Test Reports (Allure)
       uses: actions/upload-artifact@v3
