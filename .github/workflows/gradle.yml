@@ -3,11 +3,11 @@ name: CI Pipeline
 on:
   pull_request:
     branches:
-      - main
+      - master
     types: [opened, synchronize]
   push:
     branches:
-      - main
+      - master
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
