@@ -23,7 +23,7 @@ jobs:
           java-version: '21'
 
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v4
 
       - name: Run Unit Tests
         run: ./gradlew test
@@ -51,7 +51,7 @@ jobs:
           java-version: '21'
 
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/gradle-build-action@v4
 
       - name: Run Docker Compose (Spin up services)
         run: docker compose up -d
