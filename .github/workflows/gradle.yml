@@ -53,12 +53,6 @@ jobs:
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v3
 
-        # Step to install Docker Compose
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
       - name: Run Docker Compose (Spin up services)
         run: docker-compose up -d
 
