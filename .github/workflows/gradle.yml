@@ -54,7 +54,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
 
       - name: Run Docker Compose (Spin up services)
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Run E2E Tests
         run: ./gradlew testNG
